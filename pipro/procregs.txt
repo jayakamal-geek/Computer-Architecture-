@@ -1,0 +1,48 @@
+///// REGISTERS /////
+
+General purpose:
+R0 R1 ... R15 - 8-bit registers
+
+Special purpose + pipeline:
+IF stage
+needs:
+PC - 8-bit register
+affects:
+IR - 16-bit register
+
+ID stage
+needs:
+IR - 16-bit register
+affects:
+A, B - 8-bit registers
+
+EX stage
+needs:
+A, B - 8-bit registers
+PC - 8-bit register
+IR - 16-bit register
+affects:
+ALUOutput - 8-bit register
+Cond - 8-bit register (boolean)
+
+MEM stage
+needs:
+ALUOutput - 8-bit register
+IR - 16-bit register
+(mem)
+affects:
+LMD - 8-bit
+(mem)
+
+WB stage
+needs:
+IR - 16-bit register
+
+note:
+ADD MUL AND NOT SUB OR XOR : IF ID EX WB
+LOAD: IF ID EX MEM WB
+STORE: IF ID EX MEM
+INC : IF ID EX WB
+JMP : IF ID EX WB
+BEQZ: IF ID EX WB
+HLT : IF ID

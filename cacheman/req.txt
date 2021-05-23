@@ -1,0 +1,45 @@
+task0:
+- design cache block struct
+
+task1:
+- design cache class
+    : note: differentiate read and write requests from hex input in main method, not here
+    - public: allocate(), read(), write(), getstat()
+        - allocate(int, int...) takes integer configurations and allocates cache
+        - read(hex-int) attempts to read an integer from cache
+            - handle misses, count stats
+        - write(hex-int) attempts to write an integer to cache
+            - handle misses, count stats
+        - getstat(int):int takes an integer and returns an integer statistic
+            - example: 0 for compulsory misses, 1 for number of dirty blocks evicted
+            - this stat capturing to be incorporated in read, write methods
+    - private: split read, write into modules, these called modules are private (with corresponding variables)
+        - like a method evict() to evict a block, which determines block-to-evict by calling an appropriate getvictim() according to replacement-policy (private variable)
+
+task2:
+- implement the cache class methods
+
+task3:  
+- write main (driver) method
+    - automated input/output
+    - human input/output (use flags --hin --hout)
+        : by human, we mean using "fully associative" in place of "0" for cache associativity, etc, highly descriptive
+
+task4:
+- write test cases, include cases for
+    - compulsory misses
+    - capacity misses
+    - conflict misses
+
+
+Difficulties (opinionated):
+task0: 1/5      = 0.2
+task1: 3/5      = 0.6
+task2: 4/5      = 0.8
+task3: 2/5      = 0.4
+task4: 5/5      = 1.0
+
+Proposed split:
+0 2 
+1 3 
+4   
