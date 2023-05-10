@@ -1,0 +1,57 @@
+#A text file explaining the code 
+    The time taken for smaller values of n is almost same for both recursion and iteration but, values of recursion are slightly greater than the 
+values of iteration. Time taken for larger values of N gives us the real comparision for larger values of N, the time taken for recursion is far
+greater than time taken for iteration. After reaching a certain number of N the time taken for recursion rapidly increases with increase in N.
+
+Complexity analyis of iteration: 
+    There are N iterations and each iteration performs a fixed number of instructions k, so total number of instructions will be N*k, hence if
+    time taken per each instruction is assumed to be constant 't', then total time taken will be N*k*t. If the assumption of constant t is not 
+    considered then assume that time taken for each of k instructions is t_1, t_2....., t_k. Then time taken for each iteration will be 
+    t_1 + t_2 +....+ t_k, let that value be t_0. Now total time taken will be t_0 * N. Hence for iteration time taken will be linear growth. But 
+    N*t_0 is not the total growth we also need to add additional constant time t' which is for operations outside the loop. Hence total time
+    taken is N*t_0 + t', as we can clearly see this is a linear growth of run time of the program.
+
+Complexity analyis of recursion:
+    For computing the Nth term of fibanocci series using recursion we need to compute (N-1)th and (N-2)th terms seperately and add them. Hence,
+    the time taken to calculate Nth term is sum of time taken to calculate (N-1)th term and (N-2)th term and a constant time. So let T(N) be time
+    taken to calculate nth term of Fibanocci series using recursion then,
+            T(N) = T(N-1) + T(N-2) + t_0  -----> equation 0 //t_0 is constant time that is needed for the other instructions other than recursion.
+            T(N-1) = T(N-2) + T(N-3) + t_0  -----> equation 1
+            T(N-2) = T(N-3) + T(N-4) + t_0  -----> equation 2
+            T(N-3) = T(N-4) + T(N-5) + t_0  -----> equation 3
+            .
+            .
+            .
+            .
+            .
+            T(2) = T(1) + T(0) + t_0  -----> equation N-2    //the base case for calculating time
+
+    Now to make the solution simpler we assume a small approximation that T(N-1) = T(N-2) to get worst case
+            T(N) = 2*T(N-1) + t_0
+            T(N) = 2*(2*T(N-1) + t_0) + t_0
+
+    Similarly on further simplification we get :
+            T(N) = 2^(N-2)*T(1) + (1 + 2 + 4 + 8 + .... +2^(N-2))*t_0
+            T(N) = 2^(N-2)*T(1) + (2^(N-1))*t_0
+
+    We can clearly see that T(N) has exponential times so as the value of N increses time taken for computing Nth term using recursion
+    exponentially increases. Hence time taken has an an exponential growth for recursion for fibanocci series 
+
+        Here is a list of time(cycles) vs N. The entered values are mean of 10 tries each. The values are obtained by using "rdtscp". These 
+    values can only give a rough Idea about the time taken as there is a lot of error and difference from mean value. The cycle count when 
+    verified mulitple times gave different results each time some times it very fast in order of 10^3 but most other times its 10^4, this 
+    is because time taken also depends on various factors like processes running in background, delay in memory accesses and a lot. 
+    |__N__|_ Iterative _|_ Recursive _|
+    |  1  | 82932       | 86396       |
+    |  2  | 83179       | 88510       |
+    |  3  | 86177       | 88968       |
+    |  4  | 87291       | 90185       |
+    |  5  | 90204       | 94616       |
+    |  6  | 87158       | 95388       |
+    |  7  | 89282       | 96134       |
+    |  8  | 91393       | 97369       |
+    |  9  | 92410       | 107938      |
+    |  10 | 92627       | 140321      |
+    |  20 | 111256      | 240606      |
+    |  30 | 114874      | 9765615     |
+    |  40 | 125050      | 5355455483  |

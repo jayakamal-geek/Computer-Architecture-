@@ -1,0 +1,96 @@
+2, 5, 8, 11, 14, 
+
+\item \textbf{Sensitivity Analysis}:\\
+
+		\item Given that the value of one arc (p, q) in a network G(N, A) is changed from $C_{pq}$ to $C'_{pq}$ such that 
+		\[$C'_{pq}$ < $C_{pq}$\]
+
+		Now if we take a look at the all pairs shortest paths problem for this directed network, then for each pair we have 2 cases possible. 
+
+		\item Possible Cases: \\
+		\begin{enumerate}
+
+			\item \textbf{Case I} : The arc (p, q) is not included in the shortest path of the pair of points.
+			If the arc (p, q) is not included in the shortest path of points previously, then we need to check its possibillity now as its value is decreased. So for any 2 vertices i, j the path with the arc (p, q) included is 
+				\[i \Rightarrow p \Rightarrow q \Rightarrow j\]
+			The minimum length of this path equals the sum of shortest distance from i to p, value of arc (p, q) and shortest distance from q to j, which equals
+				\[d_{ip} + C'_{pq} + d_{qj}\] 
+			Now we compare with the old value of minimum distannce from i to j $d_{ij}$, and take the minimum value. So if $d'_{ij}$ is the new minimum distance from vertex i to j then
+				\[d'_{ij} = minimum(d_{ij}, (d_{ip} + C'_{pq} + d_{qj}))\]
+
+			\item \textbf{Case II} : The arc (p, q) is included in the shortest path of the pair of points.
+			If the arc (p, q) is included in the shortest path of points already then the decrease in the shortest path will be equal to the decrease in the value of arc (p, q). So if $d'_{ij}$ is the new minimum distance from vertex i to j then
+				\[d'_{ij} = d_{ip} + C'_{pq} + d_{qj}\]
+			As $d_{ij}$ is greater than $d_{ip} + C'_{pq} + d_{qj}$ we can write $d'_{ij}$ as 
+				\[d'_{ij} = minimum(d_{ij}, (d_{ip} + C'_{pq} + d_{qj}))\]
+		\end{enumerate}
+		
+		So now we can club the both cases and essentially write shortest path between any pair of vertices i, j is 
+			\[d'_{ij} = minimum(d_{ij}, (d_{ip} + C'_{pq} + d_{qj}))\]
+
+		This method of finding the shortest distance hold true always if the weights are positive. But if the weights are negative then there should not exist a negative cycle. A negative cycle is when the new weight across the cycle is negative, So the more number of times you go across the cycle the more the the value of shortest path decreases i.e. eventually it tends to negative infinity. So you can define shortest paths only if there exists no negative cycles. The network initially has finite shortest paths computed already, Hence it does not have any negative cycles. So it will be enough for us to ensure that the new arc is not forming any negative cycles. So the shortest paths can be computed if and only if 
+			\[d_{qp} + C'_{pq} \geq 0\]
+
+		So the algorithm would be
+		\begin{lstlisting}
+		Update(G, $C'_{pq}$)
+			if($d_{qp} + C'_{pq}$ < 0)
+				return;	//Existence of a negative cycle detected
+			else
+				for each pair [i, j] in node do
+					$d_{ij} = minimum(d_{ij}, (d_{ip} + C'_{pq} + d_{qj}))$
+		\end{lstlisting}   
+
+		Hence the given set of statements correctly finds the modified all-pair shortest path distances.
+
+
+
+\item\textbf{Cities and Highways}:\\
+	Given a set of cities, along with the pattern of highways between them, in the form of an undirected graph G = (V, E). Each stretch of highway e 2 E connects two of the cities, and you know its length in miles, le. You want to 			get from city s to city t. There’s one problem: your car can only hold enough gas to cover L miles. There are gas stations in each city, but not between cities. Therefore, you can only take a route if every one of itsedges has length $l_e$ \leq L. 
+
+	\begin{enumerate}
+		\item In the first sub problem we are required to check if travelling from city s to city is possible with the fuel tank capacity limitation. This can be simple solved by first getting all edges e with length $l_e$ \leq L, and then forming an adjacency list with the obtained edges and performing a DFS on the obtained set of edges with start vertex s and after the DFS if t is marked visited, then we can reach t from s with the fuel tank capacity limitation.
+		\textbf{Psuedocode:}
+		\begin{lstlisting}
+		bool reachable(E, V, L, s, t):
+			Graph G(V)
+			bool visited[V] = {0}		//all values initialised to false
+			for e in E do:
+				if (e.weight \leq L)
+		          		G.AddEdge(e)	//adding edges in to graph represented using an adjacency list
+
+			G.DFS(s, visited)		//DFS on graph G with start point s and boolean visited array
+			return visited[t]		//returning the result of the visited value of city t.
+		\end{lstlisting} 
+
+		\textbf{Proof of Correctness:}
+			As the maximum length of the road we can travel is L, it is enough for us to just check connectivity only on the roads with length less than or equal to length. Hence first we go across the edges array to find edges with weight less than or equal to L, and add that edges to the Graph. Now after the edges addition we have a graph that is subgraph of the original graph. Now on performing a DFS from start vertex s, then after the DFS we have the boolean value of the vertex t marked true if a path exists, else it will be marked false.
+   
+		\textbf{Complexity Analysis:}
+			Now we initially go across all the edges and perform $k_1$ operations at most. Now is E' edges have length less than equal L, the we perform $k_2$ operations at most. and then for DFS the worst case complexity is O(E' + V). Hence the overall complexity will be
+		\[T(E, V) = k_{1}*E + k_{2}*E' + O(E' + V)\]
+		\[T(E, V) = O(E + E' + V)\]
+		As E' is always less than or equal to E we can rewrite the above complexity analysis equation as
+		\[T(E, V) = O(E + V)\]
+			Hence the complexity of the overall algorithm is O(E + V).
+
+		\item Now in the second subquestion we are required to find the minimum fuel tank capacity that is required to travel from city s to city t. So the question can be translated like out of all possible paths from city s to t, find the path with minimum value of maximum length of all roads in the path.
+	\end{enumerate}
+
+
+
+\item\textbf{True or False:}
+	\begin{enumerate}
+	\end{enumerate}
+
+\item \textbf{Huffman Encoding Verification:}\\
+	Huffman Encoding is a lossless data compression algorithm, The idea is to assign variable-length codes to input characters, The most frequent character get the shortest code and least frequent charecter gets the longest codes, Thus decreasing the average code length to a very smaller value compared to the length required to have a constant code length. And in the most standard method we use 0 for higher frequency branch and 1 for lower frequency branch and all of our below examples use that notation. We use Hu↵man’s algorithm to obtain an encoding of alphabet {a, b, c} with frequencies $f_a, f_b, f_c$.
+	\begin{enumerate}
+		\item {0, 10, 11}: This encoding is possible when $f_a \geq f_b + f_c$ and  $f_b > f_c$. Ex: {0.6, 0.3, 0.1}.
+		\item {0, 1, 00}: Here there exists a character with code 00, so it means that node 0 is not a leaf node so a character with code 0 should not exist, 01 must exist instead of 0 for the given encoding to be valid
+		\item {10, 01, 00}: In here we have 01 and 00 so it means that node 0 is not a leaf node and has 2 children, so now as only one node is left node 1 must be a leaf node but in the encoding node 1 has a child despite only one node being left so this encoding is not possible, it is possible if 1 exists instead of 10.
+	\end{enumerate}
+
+\item \textbf{}
+
+
